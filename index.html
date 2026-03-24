@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1280">
+    <title>Escuela de Idiomas del Ejército</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&family=Syncopate:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --gold-glow: #fbbf24; 
+            --gold-shadow: rgba(251, 191, 36, 0.6);
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(-45deg, #0f172a, #1e293b, #1e1b4b, #0f172a);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #f8fafc;
+            margin: 0;
+            font-size: 1.15rem;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #welcome-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(25px);
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: rgba(30, 41, 59, 0.95);
+            border: 2px solid var(--gold-glow);
+            box-shadow: 0 0 50px var(--gold-shadow);
+            max-width: 850px;
+            width: 100%;
+            padding: 3.5rem 2.5rem;
+            border-radius: 40px;
+            text-align: center;
+        }
+
+        .neon-title {
+            font-family: 'Syncopate', sans-serif !important;
+            font-weight: 800;
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 12px;
+            margin-bottom: 25px;
+            animation: neonPulse 2s infinite alternate;
+        }
+
+        @keyframes neonPulse { from { text-shadow: 0 0 20px var(--gold-glow); } to { text-shadow: 0 0 10px var(--gold-glow); } }
+
+        .logo-central-container {
+            width: 200px; height: 200px;
+            margin: 0 auto;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            border: 3px solid var(--gold-glow);
+            background: rgba(0,0,0,0.2);
+            overflow: hidden;
+            filter: drop-shadow(0 0 20px var(--gold-shadow));
+            animation: rotateLogo 12s linear infinite;
+        }
+
+        @keyframes rotateLogo { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 3.5rem;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            color: #0f172a;
+            font-weight: 800;
+            font-family: 'Syncopate', sans-serif;
+            border-radius: 100px;
+            box-shadow: 0 8px 25px var(--gold-shadow);
+            transition: 0.4s;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-gold:hover { transform: scale(1.02); box-shadow: 0 0 40px var(--gold-glow); }
+
+        .exam-graphic-box {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), transparent);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .data-display-box {
+            background: rgba(15, 23, 42, 0.8);
+            border-left: 4px solid var(--gold-glow);
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+        .whatsapp-wrapper {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .wa-label {
+            background: rgba(15, 23, 42, 0.9);
+            color: #25d366;
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-family: 'Syncopate';
+            font-size: 10px;
+            font-weight: 800;
+            border: 1px solid #25d366;
+            box-shadow: 0 0 15px rgba(37, 211, 102, 0.2);
+            white-space: nowrap;
+        }
+
+        .whatsapp-float {
+            background: #25d366;
+            color: white;
+            width: 65px; height: 65px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 35px;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+            animation: pulse-wa 2s infinite;
+        }
+
+        @keyframes pulse-wa {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        #loading-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(15, 23, 42, 0.95); z-index: 10000;
+            flex-direction: column; align-items: center; justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="whatsapp-wrapper">
+        <div class="wa-label">SOPORTE TÉCNICO</div>
+        <a href="https://wa.me/59167336593" target="_blank" class="whatsapp-float">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <div id="welcome-modal">
+        <div class="modal-content">
+            <div class="w-32 h-32 mx-auto mb-6 flex items-center justify-center border-2 border-yellow-500/50 p-2 rounded-full overflow-hidden bg-black/20">
+                <img src="LOGO_EIE.png" alt="Logo" class="max-w-full max-h-full object-contain">
+            </div>
+            <h2 class="text-2xl md:text-3xl font-black mb-6 text-yellow-500 uppercase" style="font-family: 'Syncopate';">Instrucciones</h2>
+            <div class="space-y-4 px-6 text-slate-100 text-lg text-justify mb-10">
+                <p class="italic leading-relaxed text-center">
+					1. Si dará el examen en un dispositivo móvil deberá activar la opción SITIO PARA COMPUTADORA y subir el volumen al maximo.<br>
+                    2. Introduzca su Cedula de Identidad para verificar sus datos.<br>
+                    3. Una vez verificado sus datos podrá empezar con el examen.<br>
+					4. En el caso de haber realizado su examen se le mostrara su nota obtenida.<br>
+					5. Si se habilita la opción de Iniciar Test, presione Iniciar.<br>
+                    6. Si tiene algún inconveniente comuníquese con el Cel. 67336593.
+                </p>
+            </div>
+            <button onclick="closeModal()" class="btn-gold px-10 py-4 text-sm w-full md:w-auto">ACEPTAR Y CONTINUAR</button>
+        </div>
+    </div>
+
+    <div id="loading-overlay">
+        <div class="w-20 h-20 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin"></div>
+        <p class="mt-8 text-yellow-500 font-bold text-xl tracking-widest uppercase" style="font-family: 'Syncopate';">Procesando...</p>
+    </div>
+
+    <nav class="fixed top-0 w-full z-50 px-10 py-6 bg-slate-950/95 border-b border-yellow-500/50 backdrop-blur-md">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="w-16 h-16 flex items-center justify-center rounded-full border border-yellow-500/30 overflow-hidden bg-black/20 p-1">
+                    <img src="LOGO_EIE.png" class="max-w-full max-h-full object-contain" alt="Logo EIE">
+                </div>
+                <span class="font-bold text-white uppercase text-sm" style="font-family: 'Syncopate'; letter-spacing: 2px;">ESCUELA DE IDIOMAS DEL EJÉRCITO</span>
+            </div>
+            <img src="https://lh3.googleusercontent.com/u/0/d/1uWCjqIfqNOh2ihupIsjh9Iq31jcWeK-Q" class="h-16 w-auto" style="filter: drop-shadow(0 0 8px #fbbf24);" alt="Ejército">
+        </div>
+    </nav>
+
+    <main class="pt-48 pb-32 px-8">
+        <div class="max-w-6xl mx-auto">
+            
+            <div class="flex flex-col items-center mb-16 text-center">
+                <div class="neon-title">EIE</div>
+                <div class="logo-central-container mt-6">
+                    <img src="LOGO_EIE.png" alt="Logo" class="max-w-full max-h-full object-contain p-2">
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                
+                <div class="glass-card flex flex-col items-center justify-between space-y-8">
+                    <div class="exam-graphic-box w-full">
+                        <i class="fas fa-id-card text-6xl text-yellow-500 mb-4"></i>
+                        <h3 class="text-white font-bold uppercase tracking-widest text-xl mb-4" style="font-family: 'Syncopate';">Verificación de Datos</h3>
+                        
+                        <input type="text" id="ci-exam" placeholder="INGRESE SU CÉDULA" class="bg-slate-900 border border-white/20 rounded-xl p-4 w-full text-center text-white focus:border-yellow-500 outline-none mb-4">
+                        
+                        <div id="exam-data-display" class="hidden text-left space-y-2 mb-4 bg-black/30 p-4 rounded-xl border border-yellow-500/30">
+                            <p class="text-[10px] text-yellow-500 font-bold uppercase">Datos Confirmados:</p>
+                            <p id="exam-name" class="text-white text-sm font-bold uppercase"></p>
+                            <p id="exam-course" class="text-slate-300 text-[12px]"></p>
+                        </div>
+                    </div>
+
+                    <button id="btn-verify-exam" onclick="verificarParaExamen()" class="btn-gold w-full py-5 text-lg flex items-center justify-center gap-4">
+                        <i class="fas fa-user-check"></i> VERIFICAR IDENTIDAD
+                    </button>
+
+                    <a id="link-start-exam" href="#" target="_blank" class="hidden btn-gold w-full py-5 text-lg flex items-center justify-center gap-4 bg-green-600" style="background: #16a34a !important;">
+                        <i class="fas fa-play-circle"></i> INICIAR EXAMEN
+                    </a>
+
+                    <div id="exam-done-msg" class="hidden w-full p-4 bg-red-500/20 border border-red-500 rounded-xl text-center">
+                        <p class="text-red-500 font-bold uppercase text-sm">Usted ya realizó su evaluación</p>
+                        <p id="exam-done-detail" class="text-white text-[12px] mt-1"></p>
+                    </div>
+
+                    <button id="btn-reset-exam" onclick="resetVerificacion()" class="hidden w-full py-4 text-xs font-bold text-yellow-500 uppercase tracking-widest border border-yellow-500/30 rounded-full hover:bg-yellow-500/10 transition-all">
+                        <i class="fas fa-sync-alt mr-2"></i> Reintentar / Nueva Búsqueda
+                    </button>
+                </div>
+
+                <div class="glass-card space-y-6">
+                    <h2 class="text-yellow-500 font-bold uppercase tracking-widest text-center text-xl" style="font-family: 'Syncopate';">Consulta de Notas</h2>
+                    <div class="space-y-4">
+                        <input type="text" id="ci-search" placeholder="INGRESE SU CARNET" class="bg-slate-900 border border-white/20 rounded-xl p-4 w-full text-center text-white focus:border-yellow-500 outline-none">
+                        <button onclick="consultarNota()" class="btn-gold w-full py-4 text-sm justify-center flex items-center">
+                            <i class="fas fa-search mr-2"></i> BUSCAR RESULTADO
+                        </button>
+                    </div>
+
+                    <div id="results-panel" class="hidden space-y-3 animate-fade-in pt-4 border-t border-white/10">
+                        <div class="grid grid-cols-1 gap-3">
+                            <div class="data-display-box">
+                                <span class="text-[10px] text-yellow-500 font-bold uppercase">Nombre Completo</span>
+                                <p id="res-nombre" class="text-white font-semibold text-base uppercase">-</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="data-display-box">
+                                    <span class="text-[10px] text-yellow-500 font-bold uppercase">Nivel / Rango</span>
+                                    <p id="res-nivel" class="text-yellow-500 font-bold text-sm uppercase">-</p>
+                                </div>
+                                <div class="data-display-box">
+                                    <span class="text-[10px] text-yellow-500 font-bold uppercase">Libro (Book)</span>
+                                    <p id="res-libro" class="text-white font-semibold text-sm">-</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="data-display-box">
+                                    <span class="text-[10px] text-yellow-500 font-bold uppercase">Fecha</span>
+                                    <p id="res-fecha" class="text-white font-semibold text-sm">-</p>
+                                </div>
+                                <div class="data-display-box border-yellow-500 bg-yellow-500/10">
+                                    <span class="text-[10px] text-yellow-600 font-black uppercase">Nota Final</span>
+                                    <p id="res-nota" class="text-yellow-500 font-black text-xl">-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgaFqolwi59Dk7FoDdJD0Ts8tHoUA-E33Zb6zofslI9ink30dWUyS3EALFvpDT7zLcRA/exec";
+        
+        const EXAM_LINKS = {
+            "1":   "https://eievirtual2026.github.io/BOOK_2/",   "1.1": "https://eievirtual2026.github.io/BOOK_2./", "1.2": "https://eievirtual2026.github.io/BOOK_2../", "1.3": "https://eievirtual2026.github.io/BOOK_2.../", "1.4": "https://eievirtualfiliales.github.io/BOOK_2/", "1.5": "https://eievirtualfiliales.github.io/BOOK_2./", "1.6": "https://eievirtualfiliales.github.io/BOOK_2../", "1.7": "https://eievirtualfiliales.github.io/BOOK_2.../", 
+            "2":   "https://eievirtual2026.github.io/BOOK_8/",   "2.1": "https://eievirtual2026.github.io/BOOK_8./", "2.2": "https://eievirtualfiliales.github.io/BOOK_8/", "2.3": "https://eievirtualfiliales.github.io/BOOK_8./",
+            "3":   "https://eievirtual2026.github.io/BOOK_14/",   "3.1": "https://eievirtual2026.github.io/BOKK_14./", "3.2": "https://eievirtualfiliales.github.io/BOOK_14/", "3.3": "https://eievirtualfiliales.github.io/BOOK_14./",
+            "4":   "https://eievirtual2026.github.io/BOOK_20/",   "4.1": "https://eievirtual2026.github.io/BOOK_20./", "4.2": "https://eievirtualfiliales.github.io/BOOK_20/", "4.3": "https://eievirtualfiliales.github.io/BOOK_20./",
+            "5":   "https://eievirtual2026.github.io/BOOK_26/",  "5.1": "https://eievirtual2026.github.io/BOOK_26./", "5.2": "https://eievirtualfiliales.github.io/BOOK_26/", "5.3": "https://eievirtualfiliales.github.io/BOOK_26./"
+        };
+
+        const EXAM_LABELS = {
+            "1": "TEST BOOK 2", "1.1": "TEST BOOK 2", "1.2": "TEST BOOK 2", "1.3": "TEST BOOK 2", "1.4": "TEST BOOK 2", "1.5": "TEST BOOK 2", "1.6": "TEST BOOK 2", "1.7": "TEST BOOK 2",
+            "2": "TEST BOOK 8", "2.1": "TEST BOOK 8", "2.2": "TEST BOOK 8", "2.3": "TEST BOOK 8",
+            "3": "TEST BOOK 14", "3.1": "TEST BOOK 14", "3.2": "TEST BOOK 14", "3.3": "TEST BOOK 14",
+            "4": "TEST BOOK 20", "4.1": "TEST BOOK 20", "4.2": "TEST BOOK 20", "4.3": "TEST BOOK 20",
+            "5": "TEST BOOK 26", "5.1": "TEST BOOK 26", "5.2": "TEST BOOK 26", "5.3": "TEST BOOK 26"
+        };
+
+        function closeModal() { 
+            document.getElementById('welcome-modal').style.display = 'none'; 
+            document.body.style.overflow = 'auto';
+        }
+
+        // --- FUNCIÓN PARA REINICIAR LA VERIFICACIÓN ---
+        function resetVerificacion() {
+            const ciInput = document.getElementById('ci-exam');
+            ciInput.value = "";
+            ciInput.disabled = false;
+            document.getElementById('exam-data-display').classList.add('hidden');
+            document.getElementById('link-start-exam').classList.add('hidden');
+            document.getElementById('exam-done-msg').classList.add('hidden');
+            document.getElementById('btn-reset-exam').classList.add('hidden');
+            document.getElementById('btn-verify-exam').classList.remove('hidden');
+            ciInput.focus();
+        }
+
+        async function verificarParaExamen() {
+            const ci = document.getElementById('ci-exam').value.trim();
+            const loader = document.getElementById('loading-overlay');
+            if(!ci) return;
+
+            loader.style.display = 'flex';
+            
+            document.getElementById('exam-data-display').classList.add('hidden');
+            document.getElementById('link-start-exam').classList.add('hidden');
+            document.getElementById('exam-done-msg').classList.add('hidden');
+            document.getElementById('btn-reset-exam').classList.add('hidden');
+
+            try {
+                const response = await fetch(`${SCRIPT_URL}?ci=${encodeURIComponent(ci)}`);
+                const data = await response.json();
+
+                if(data.status === "success") {
+                    document.getElementById('ci-exam').disabled = true;
+                    document.getElementById('exam-name').innerText = data.nombre;
+                    document.getElementById('exam-course').innerText = data.curso;
+                    document.getElementById('exam-data-display').classList.remove('hidden');
+                    document.getElementById('btn-reset-exam').classList.remove('hidden'); // Mostrar botón volver
+
+                    if(data.nota && data.nota !== "" && data.nota !== 0) {
+                        document.getElementById('exam-done-detail').innerText = `Nota: ${data.nota} - Fecha: ${data.fecha}`;
+                        document.getElementById('exam-done-msg').classList.remove('hidden');
+                        document.getElementById('btn-verify-exam').classList.add('hidden');
+                    } else {
+                        const key = data.book_key.toString().trim();
+                        const link = EXAM_LINKS[key];
+                        const label = EXAM_LABELS[key] || "INICIAR EVALUACIÓN";
+
+                        if(link) {
+                            const btnExam = document.getElementById('link-start-exam');
+                            btnExam.href = link;
+                            btnExam.innerHTML = `<i class="fas fa-play-circle"></i> INICIAR ${label}`;
+                            btnExam.classList.remove('hidden');
+                            document.getElementById('btn-verify-exam').classList.add('hidden');
+                        } else {
+                            alert("Su perfil no tiene un libro asignado correctamente.");
+                        }
+                    }
+                } else {
+                    alert("Cédula no encontrada en la base de datos.");
+                }
+            } catch (e) {
+                alert("Error de conexión.");
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        async function consultarNota() {
+            const ci = document.getElementById('ci-search').value.trim();
+            const loader = document.getElementById('loading-overlay');
+            const panel = document.getElementById('results-panel');
+            
+            if(!ci) return;
+            loader.style.display = 'flex';
+            panel.classList.add('hidden');
+
+            try {
+                const response = await fetch(`${SCRIPT_URL}?ci=${encodeURIComponent(ci)}`);
+                const data = await response.json();
+
+                if(data.status === "success") { 
+                    document.getElementById('res-nombre').innerText = data.nombre;
+                    const bookNum = parseFloat(data.book_key) || 0;
+                    document.getElementById('res-libro').innerText = "BOOK " + bookNum;
+                    document.getElementById('res-fecha').innerText = data.fecha || "---";
+                    document.getElementById('res-nota').innerText = data.nota || "Pte.";
+                    
+                    let nivelTexto = "";
+                    if(bookNum >= 1 && bookNum <= 6) nivelTexto = "NIVEL I";
+                    else if(bookNum >= 7 && bookNum <= 12) nivelTexto = "NIVEL II";
+                    else if(bookNum >= 13 && bookNum <= 18) nivelTexto = "NIVEL III";
+                    else if(bookNum >= 19 && bookNum <= 24) nivelTexto = "NIVEL IV";
+                    else if(bookNum >= 25 && bookNum <= 30) nivelTexto = "NIVEL V";
+                    else nivelTexto = "EXTERNO";
+                    
+                    document.getElementById('res-nivel').innerText = nivelTexto;
+                    panel.classList.remove('hidden');
+                } else {
+                    alert("No se encontraron registros.");
+                }
+            } catch (error) {
+                alert("Error al conectar.");
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        window.onload = () => { document.body.style.overflow = 'hidden'; };
+    </script>
+</body>
+</html>
